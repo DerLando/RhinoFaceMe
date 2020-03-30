@@ -1,4 +1,6 @@
-﻿namespace RhinoFaceMe
+﻿using RhinoFaceMe.UI.Models;
+
+namespace RhinoFaceMe
 {
     ///<summary>
     /// <para>Every RhinoCommon .rhp assembly must have one and only one PlugIn-derived
@@ -11,6 +13,8 @@
     public class RhinoFaceMePlugIn : Rhino.PlugIns.PlugIn
 
     {
+        public ParticleConduitListViewModel FaceMeTable { get; private set; } = new ParticleConduitListViewModel();
+
         public RhinoFaceMePlugIn()
         {
             Instance = this;

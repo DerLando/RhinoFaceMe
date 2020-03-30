@@ -53,13 +53,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RhinoFaceMeCommand.cs" />
+    <Compile Include="Commands\fmCreate.cs" />
+    <Compile Include="Commands\fmManager.cs" />
+    <Compile Include="Core\FaceMeDisplay.cs" />
     <Compile Include="RhinoFaceMePlugIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Models\ParticleConduitListViewModel.cs" />
+    <Compile Include="UI\Models\ParticleConduitModel.cs" />
+    <Compile Include="UI\Views\ParticleSystemManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\plugin-utility.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
