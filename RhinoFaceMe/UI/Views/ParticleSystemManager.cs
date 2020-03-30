@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino.DocObjects;
 using Rhino.UI;
 using RhinoFaceMe.UI.Models;
 
@@ -38,6 +39,9 @@ namespace RhinoFaceMe.UI.Views
             _gV_ParticleSystems.SelectedItemBinding.BindDataContext((ParticleConduitListViewModel avm) =>
                 avm.SelectedIndex);
 
+            // set up events for grid view
+            _gV_ParticleSystems.CellClick += On_CellClick;
+
             #region Grid Columns
 
             // name
@@ -63,6 +67,15 @@ namespace RhinoFaceMe.UI.Views
                 HeaderText = "Size",
                 DataCell = new TextBoxCell("Size"),
                 Editable = true,
+            });
+
+            // color
+            var bitmapSize = 12;
+            _gV_ParticleSystems.Columns.Add(new GridColumn
+            {
+                DataCell = new ImageViewCell { Binding = Binding.Property<ParticleConduitModel, Image>(l => new Bitmap(bitmapSize, bitmapSize, PixelFormat.Format24bppRgb, from index in Enumerable.Repeat(0, bitmapSize * bitmapSize) select l.Color.ToEto())) },
+                HeaderText = "Color",
+                Editable = true
             });
 
             #endregion
@@ -93,9 +106,21 @@ namespace RhinoFaceMe.UI.Views
             _gV_ParticleSystems.Invalidate();
         }
 
+        private void On_CellClick(object sender, GridCellMouseEventArgs e)
+        {
+            // test if color
+            if (e.GridColumn.HeaderText == "Color")
+            {
+                var model = e.Item as ParticleConduitModel;
+                var color = model.Color;
+                Dialogs.ShowColorDialog(ref color);
+                model.Color = color;
+            }
+        }
+
         #region IPanel methods
 
-        public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)
+            public void PanelShown(uint documentSerialNumber, ShowPanelReason reason)
         {
             // Called when the panel tab is made visible, in Mac Rhino this will happen
             // for a document panel when a new document becomes active, the previous

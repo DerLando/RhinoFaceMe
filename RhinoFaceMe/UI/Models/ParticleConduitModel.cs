@@ -102,7 +102,7 @@ namespace RhinoFaceMe.UI.Models
 
         private void UpdateColor()
         {
-            throw new NotImplementedException();
+            RebuildAfterChange();
         }
 
         private void UpdateSize()
@@ -133,7 +133,7 @@ namespace RhinoFaceMe.UI.Models
 
         private void RebuildAfterChange()
         {
-            var locations = (from p in _fmd.System select new Point3d(p.Location)).ToList();
+            var locations = (from p in _fmd.System select GetOriginalPoint(p.Location)).ToList();
             _fmd.ResetSystem();
             foreach (var location in locations)
             {
