@@ -8,6 +8,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using Rhino.DocObjects;
 using Rhino.UI;
+using RhinoFaceMe.UI.Custom;
 using RhinoFaceMe.UI.Models;
 
 namespace RhinoFaceMe.UI.Views
@@ -78,6 +79,14 @@ namespace RhinoFaceMe.UI.Views
                 Editable = true
             });
 
+            // alignment
+            _gV_ParticleSystems.Columns.Add(new GridColumn
+            {
+                HeaderText = "Alignment",
+                DataCell = new EnumCell<ParticleAlignment>(),
+                Editable = true,
+            });
+
             #endregion
 
             // write layout
@@ -109,13 +118,14 @@ namespace RhinoFaceMe.UI.Views
         private void On_CellClick(object sender, GridCellMouseEventArgs e)
         {
             // test if color
-            if (e.GridColumn.HeaderText == "Color")
-            {
-                var model = e.Item as ParticleConduitModel;
-                var color = model.Color;
-                Dialogs.ShowColorDialog(ref color);
-                model.Color = color;
-            }
+            if (e.GridColumn is null) return;
+            if (e.GridColumn.HeaderText != "Color") return;
+            
+            var model = e.Item as ParticleConduitModel;
+            var color = model.Color;
+            Dialogs.ShowColorDialog(ref color);
+            model.Color = color;
+            
         }
 
         #region IPanel methods

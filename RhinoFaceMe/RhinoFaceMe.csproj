@@ -58,6 +58,7 @@
     <Compile Include="Core\FaceMeDisplay.cs" />
     <Compile Include="RhinoFaceMePlugIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Custom\EnumCell.cs" />
     <Compile Include="UI\Models\ParticleConduitListViewModel.cs" />
     <Compile Include="UI\Models\ParticleConduitModel.cs" />
     <Compile Include="UI\Views\ParticleSystemManager.cs" />

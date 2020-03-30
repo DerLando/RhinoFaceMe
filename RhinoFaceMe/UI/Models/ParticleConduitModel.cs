@@ -79,8 +79,9 @@ namespace RhinoFaceMe.UI.Models
             get => _alignment;
             set
             {
+                var locations = (from p in _fmd.System select GetOriginalPoint(p.Location)).ToList();
                 _alignment = value;
-                UpdateAlignment();
+                RebuildAfterChange(locations);
             }
         }
 
