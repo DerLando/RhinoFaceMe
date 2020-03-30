@@ -26,6 +26,11 @@ namespace RhinoFaceMe.Core
             e.Display.DrawParticles(System, Dbm);
         }
 
+        protected override void CalculateBoundingBox(CalculateBoundingBoxEventArgs e)
+        {
+            e.BoundingBox.Union(System.BoundingBox);
+        }
+
         public void AddParticle(Particle p)
         {
             System.Add(p);

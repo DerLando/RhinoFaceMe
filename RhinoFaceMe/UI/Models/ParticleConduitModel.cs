@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rhino;
 using Rhino.Geometry;
 using RhinoFaceMe.Core;
 
@@ -89,7 +90,8 @@ namespace RhinoFaceMe.UI.Models
 
         private void UpdateActive()
         {
-            throw new NotImplementedException();
+            _fmd.Enabled = _isActive;
+            RedrawAfterChange();
         }
 
         private void UpdateImage()
@@ -107,6 +109,8 @@ namespace RhinoFaceMe.UI.Models
             throw new NotImplementedException();
         }
 
+        #endregion
+
         public ParticleConduitModel(string name, float size, Color color, Bitmap bitmap, bool isActive)
         {
             Name = name;
@@ -119,6 +123,11 @@ namespace RhinoFaceMe.UI.Models
             _fmd = new FaceMeDisplay(_bm);
             _fmd.Enabled = _isActive;
             _alignment = ParticleAlignment.Bottom;
+        }
+
+        private void RedrawAfterChange()
+        {
+            RhinoDoc.ActiveDoc.Views.Redraw();
         }
 
         private Point3d GetAlignedPoint(Point3d pt)
@@ -150,9 +159,5 @@ namespace RhinoFaceMe.UI.Models
             };
             _fmd.System.Add(p);
         }
-
-        #endregion
-
-
     }
 }
