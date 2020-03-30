@@ -38,8 +38,9 @@ namespace RhinoFaceMe.UI.Models
             get => _size;
             set
             {
+                var locations = (from p in _fmd.System select GetOriginalPoint(p.Location)).ToList();
                 _size = value;
-                UpdateSize();
+                RebuildAfterChange(locations);
             }
         }
 
@@ -106,7 +107,7 @@ namespace RhinoFaceMe.UI.Models
 
         private void UpdateSize()
         {
-            throw new NotImplementedException();
+            RebuildAfterChange();
         }
 
         #endregion
@@ -130,6 +131,29 @@ namespace RhinoFaceMe.UI.Models
             RhinoDoc.ActiveDoc.Views.Redraw();
         }
 
+        private void RebuildAfterChange()
+        {
+            var locations = (from p in _fmd.System select new Point3d(p.Location)).ToList();
+            _fmd.ResetSystem();
+            foreach (var location in locations)
+            {
+                AddParticle(location);
+            }
+
+            RedrawAfterChange();
+        }
+
+        private void RebuildAfterChange(IEnumerable<Point3d> locations)
+        {
+            _fmd.ResetSystem();
+            foreach (var location in locations)
+            {
+                AddParticle(location);
+            }
+
+            RedrawAfterChange();
+        }
+
         private Point3d GetAlignedPoint(Point3d pt)
         {
             switch (_alignment)
@@ -141,6 +165,25 @@ namespace RhinoFaceMe.UI.Models
                     break;
                 case ParticleAlignment.Bottom:
                     pt.Z -= _size / 2.0;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return pt;
+        }
+
+        private Point3d GetOriginalPoint(Point3d pt)
+        {
+            switch (_alignment)
+            {
+                case ParticleAlignment.Top:
+                    pt.Z -= _size / 2.0;
+                    break;
+                case ParticleAlignment.Mid:
+                    break;
+                case ParticleAlignment.Bottom:
+                    pt.Z += _size / 2.0;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

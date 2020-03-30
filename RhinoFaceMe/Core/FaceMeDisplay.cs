@@ -35,5 +35,13 @@ namespace RhinoFaceMe.Core
         {
             System.Add(p);
         }
+
+        public void ResetSystem()
+        {
+            System = new ParticleSystem
+            {
+                DisplaySizesInWorldUnits = true,
+            };
+        }
     }
 }

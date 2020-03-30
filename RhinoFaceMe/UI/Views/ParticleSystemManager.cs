@@ -56,6 +56,15 @@ namespace RhinoFaceMe.UI.Views
                 DataCell = new CheckBoxCell("IsActive"),
                 Editable = true,
             });
+
+            // size
+            _gV_ParticleSystems.Columns.Add(new GridColumn
+            {
+                HeaderText = "Size",
+                DataCell = new TextBoxCell("Size"),
+                Editable = true,
+            });
+
             #endregion
 
             // write layout
