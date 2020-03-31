@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Eto.Drawing;
 using Eto.Forms;
+using Rhino.Display;
 using Rhino.DocObjects;
 using Rhino.UI;
 using RhinoFaceMe.UI.Custom;
@@ -46,12 +47,21 @@ namespace RhinoFaceMe.UI.Views
             #region Grid Columns
 
             // name
-            // name
             _gV_ParticleSystems.Columns.Add(new GridColumn
             {
                 HeaderText = "Name",
                 DataCell = new TextBoxCell("Name"),
                 Editable = false,
+            });
+
+            // image
+            _gV_ParticleSystems.Columns.Add(new GridColumn
+            {
+                HeaderText = "Image",
+                DataCell = new ImageViewCell {
+                    Binding = Binding.Property<ParticleConduitModel, Image>(
+                        l => new System.Drawing.Bitmap(l.Bitmap.GetThumbnailImage(50, 50, null, IntPtr.Zero)).ToEto())},
+                Editable = true
             });
 
             // active
@@ -83,7 +93,7 @@ namespace RhinoFaceMe.UI.Views
             _gV_ParticleSystems.Columns.Add(new GridColumn
             {
                 HeaderText = "Alignment",
-                DataCell = new EnumCell<ParticleAlignment>(),
+                DataCell = new AlignmentCell(),
                 Editable = true,
             });
 
@@ -119,13 +129,44 @@ namespace RhinoFaceMe.UI.Views
         {
             // test if color
             if (e.GridColumn is null) return;
-            if (e.GridColumn.HeaderText != "Color") return;
-            
-            var model = e.Item as ParticleConduitModel;
-            var color = model.Color;
-            Dialogs.ShowColorDialog(ref color);
-            model.Color = color;
-            
+            if (e.GridColumn.HeaderText == "Color")
+            {
+                var model = e.Item as ParticleConduitModel;
+
+                // Native
+                var color = model.Color;
+                Dialogs.ShowColorDialog(ref color);
+                model.Color = color;
+
+                // Eto
+                // TODO: implement
+
+            }
+
+            // test if image
+            if (e.GridColumn.HeaderText == "Image")
+            {
+                var model = e.Item as ParticleConduitModel;
+                // Allow the user to select a bitmap file
+                var fd = new Rhino.UI.OpenFileDialog { Filter = "Image Files (*.bmp;*.png;*.jpg)|*.bmp;*.png;*.jpg" };
+                if (!fd.ShowOpenDialog())
+                    return;
+
+                // Verify the file that was selected
+                System.Drawing.Image image;
+                try
+                {
+                    image = System.Drawing.Image.FromFile(fd.FileName);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+
+                model.Bitmap = new System.Drawing.Bitmap(image);
+
+            }
+
         }
 
         #region IPanel methods

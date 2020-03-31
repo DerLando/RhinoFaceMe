@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Rhino;
+using Rhino.Display;
 using Rhino.Geometry;
 using RhinoFaceMe.Core;
 
@@ -98,7 +99,8 @@ namespace RhinoFaceMe.UI.Models
 
         private void UpdateImage()
         {
-            throw new NotImplementedException();
+            _fmd.Dbm = new DisplayBitmap(_bm);
+            RebuildAfterChange();
         }
 
         private void UpdateColor()
@@ -202,6 +204,13 @@ namespace RhinoFaceMe.UI.Models
                 Color = _color
             };
             _fmd.System.Add(p);
+        }
+
+        public ParticleAlignment GetAlignment() => _alignment;
+
+        public void SetAlignment(ParticleAlignment pa)
+        {
+            _alignment = pa;
         }
     }
 }
